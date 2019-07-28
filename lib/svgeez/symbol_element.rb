@@ -21,10 +21,10 @@ module Svgeez
 
     def element_contents(content)
       content.scan(/\sid="(.+?)"/).flatten.each do |value|
-        uuid = SecureRandom.uuid
+        digest = Digest::MD5.new.file(@file_path).hexdigest
 
-        content.gsub!(/\s(id|xlink:href)="(#?#{value})"/m, %( \\1="\\2-#{uuid}"))
-        content.gsub!(/\s(clip-path|fill|filter|marker-end|marker-mid|marker-start|mask|stroke)="url\((##{value})\)"/m, %( \\1="url(\\2-#{uuid})"))
+        content.gsub!(/\s(id|xlink:href)="(#?#{value})"/m, %( \\1="\\2-#{digest}"))
+        content.gsub!(/\s(clip-path|fill|filter|marker-end|marker-mid|marker-start|mask|stroke)="url\((##{value})\)"/m, %( \\1="url(\\2-#{digest})"))
       end
 
       content
